@@ -294,12 +294,11 @@ js modules: used to transfer data from one  js file to another
         1.render the entire react app inside "BrowserRouter" component of react-router-dom library,provide thos step inside main.jsx file
         2.inorder to  setup path for component,make sure each component must be inside "routes" componnet of react-router-dom library ,provide this step  inside app.jsx file  
         3.to set up path for comment ,use "Route" component of react-router-dom library.route component has attributes like "path" and "element" inorder to route for componen.All route component must be inside routes component.
+         -Dynamic Routing:we can set up a dynamic/changing value in a url  along:
+       symbol ,so react app will understand value along the :is dynamic part of the URL
+       -to set up page not found URL use path as *,its path  must be setup at the end of all url in react app.
+        
     15.Higher order component(HOC): are component whose props argumnet will give another component, eg:Route component  
-
-
-
-
-
 
 
 
@@ -321,6 +320,9 @@ js modules: used to transfer data from one  js file to another
        -createSlice():used to  combine action and reduce in a single  file.
          -steps to create slice for react app
          -create js file for defining slice
+         -createAsyncThunk():used to male asynchronus call in an action in redux.it accepts 2 arguments,first is action type string ('slicename/actionname'),2 ns agumnet is a callback function it can return promice . it output can be 3 different types.
+           -pending/fulfilled/rejected.
+           -'ExtraReducers' in slice can handle promise return action .because it has define different cases to update slice store ,based on promise output
   4.Hooks used in component for managing state using  redux
     -useSelector(state=>)
     -useDispatch()    
