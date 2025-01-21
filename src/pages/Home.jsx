@@ -1,33 +1,92 @@
-import React, { useEffect } from 'react'
-import Header from '../components/Header'
-import { Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { fetchProducts } from '../redux/slices/productSlice'
+import React, { useEffect, useState } from 'react';
+import Header from '../components/Header';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProducts } from '../redux/slices/productSlice';
 
 const Home = () => {
-
   const dispatch = useDispatch()
-  useEffect(()=>{
-    dispatch(fetchProducts())
-  },[])
+  const { allProducts, loading, errorMsg } = useSelector(state=> state.productReducer)
+  console.log(allProducts,loading,errorMsg);
+
+  // pagination
+  const [currentPage,setCureentPage] = useState(1)
+  const productsPerPage = 8
+  const totalPages = Math.ceil(allProducts?.length/productsPerPage)
+  const currentPageProductLastIndex = currentPage *productsPerPage
+  const currentPageProductFirstIndex = currentPageProductLastIndex-productsPerPage 
+  const visibleAllProducts = allProducts?.slice(currentPageProductFirstIndex,currentPageProductLastIndex)
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
+
+  const navigateToNextPage = ()=>{
+    if(currentPage!=totalPages){
+      setCureentPage(currentPage+1)
+    }
+  }
+
+  const navigateToPrevPage = ()=>{
+    if(currentPage!=1){
+      setCureentPage(currentPage-1)
+    }
+  }
+
   return (
-  <>
-  <Header insideHome = {true}/>
-  <div className='container px-4 mx-auto' style={{padding:'100px'}}>
-     <div className='grid grid-cols-4 gap-4'>
-        <div className='rounded border p-2 shadow'>
-            <img height={'200px'} width={'100%'}  src="https://img.freepik.com/free-vector/shopping-supermarket-cart-with-grocery-pictogram_1284-11697.jpg?semt=ais_hybrid" alt="" />
-            <div className='text-center'>
-              <h3 className='text-xl font-bold'>title</h3>
-              <Link to={'/id/view'} className='bg-violet-600 rounded p-1 mt-3 text-white inline-block'>view more....
-              </Link>
-            </div>
-        </div>
-     </div>
-  </div>
+    <>
+      <Header insideHome={true} />
+      <div className="container px-4 mx-auto" style={{ paddingTop: '100px' }}>
+        {errorMsg ? (
+          <div className='flex justify-center items-center font-bold text-red-600 my-5 text-lg'>
+            {errorMsg}
+          </div>
+        ) : loading ? (
+          <div className='flex justify-center items-center my-5 text-2xl'>
+            <img
+              width={'70px'}
+              height={'70px'}
+              className='me-3'
+              src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiEO1m-2p6bxZvDYTAYAVyI3qbBLSWXfZB1Zc767VZXmp3EVEG1sf1T_pREx50jtMtRK2RtRoBpynzwf_r1gYu6ABj_tnMrFa_8A6m0Qqb86yTtaSqDCWmARZ8ST9ak3Uv2ahvYYr0TbUg/s1600/1.gif"
+              alt=""
+            />
+            Loading...
+          </div>
+        ) : (
+          <div className='grid grid-cols-4 gap-4'>
+            {
+            allProducts?.length > 0 ? (
+              visibleAllProducts?.map((product) => (
+                <div className='rounded border p-2 shadow' key={product.id}>
+                  <img height={'200px'} width={'100%'} src={product.thumbnail} alt="" />
+                  <div className='text-center'>
+                    <h3 className='text-xl font-bold'>{product?.title}</h3>
+                    <Link
+                      to={`/${product?.id}/view`}
+                      className='bg-violet-600 rounded p-1 mt-3 text-white inline-block'
+                    >
+                      View more...
+                    </Link>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className='flex justify-center items-center font-bold text-red-600 my-5 text-lg'>
+                Product Not Found!!!
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+       {/* pagination */}
+       <div className='text-2xl text-center mt-20'>
+        <span onClick={navigateToPrevPage} className='cursor-pointer'><i className='fa-solid fa-backward me-5'></i></span>
+        <span>{currentPage} of {totalPages}</span>
+        <span onClick={navigateToNextPage} className='cursor-pointer'><i className='fa-solid fa-forward ms-5'></i></span>
+       </div>
+    </>
+  );
+};
 
-  </>
-  )
-}
-
-export default Home
+export default Home;

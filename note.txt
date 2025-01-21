@@ -285,6 +285,7 @@ js modules: used to transfer data from one  js file to another
               -useEffect(): used to apply side effects to the functional component.we can pass side effect in its first argument as call back function ,we can also pass an optional dependency argument to decide when to apply side effect in component
               -useref(initial value):is a react hook that lets ypu refernce a value thats not needed for rendering .initial value is optional in useRef hook.it return an object with "current" key 
             -custom hooks:create a js file to discribe a specific function for a special task then we have to export the function from that file. the function name must be starts with "use" keyword
+            -useParams():hooks will return dynamic value of the route assosiated with a component
     13.form handling in React:there are 2 ways to manage data inside the form by a component  
       -comtrolled components:are componnets which store form data   inside its own state
       -uncontrolled componnets:components whose access form data using its DOM elements reference.
